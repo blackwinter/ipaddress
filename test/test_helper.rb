@@ -1,28 +1,16 @@
-require 'rubygems'
 require 'test/unit'
-
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'ipaddress'
 
-module Test::Unit
-  
-  class TestCase
-    
-    def self.must(name, &block)
-      test_name = "test_#{name.gsub(/\s+/,'_')}".to_sym
-      defined = instance_method(test_name) rescue false
-      raise "#{test_name} is already defined in #{self}" if defined
-      if block_given?
-        define_method(test_name, &block)
-      else
-        define_method(test_name) do
-          flunk "No implementation provided for #{name}"
-        end
-      end
+class Test::Unit::TestCase
+
+  if RUBY_VERSION < '1.9'
+    def refute(test, *args)
+      !assert(!test, *args)
     end
-    
   end
+
+  def assert_equal_ary(exp, act, *args)
+    assert_equal(exp, act.map { |i| i.to_string }, *args)
+  end
+
 end
-
-
