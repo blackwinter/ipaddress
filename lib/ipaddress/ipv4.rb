@@ -191,7 +191,7 @@ class IPAddress
     #     #=> "172.16.100.4"
     #
     def address
-      lazy(:address) { ary2addr(octets) }
+      lazy_attr(:address) { ary2addr(octets) }
     end
 
     #
@@ -207,7 +207,7 @@ class IPAddress
     #     #=> IPAddress::Prefix32
     #
     def prefix
-      lazy(:prefix, false) { Prefix.new(@_prefix) }
+      lazy_attr(:prefix, false) { Prefix.new(@_prefix) }
     end
 
     #
@@ -219,7 +219,7 @@ class IPAddress
     #     #=> "255.255.252.0"
     #
     def netmask
-      lazy(:netmask) { prefix.to_ip }
+      lazy_attr(:netmask) { prefix.to_ip }
     end
 
     #
@@ -250,7 +250,7 @@ class IPAddress
     #     #=> [172, 16, 100, 4]
     #
     def octets
-      lazy(:octets) { int2ary(to_i) }
+      lazy_attr(:octets) { int2ary(to_i) }
     end
 
     alias_method :groups, :octets
@@ -282,7 +282,7 @@ class IPAddress
     #     #=> 167772160
     #
     def to_i
-      lazy(:int) { ary2int(octets) }
+      lazy_attr(:int) { ary2int(octets) }
     end
 
     alias_method :u32, :to_i
@@ -308,7 +308,7 @@ class IPAddress
     #   a.puts binary_data
     #
     def data
-      lazy(:data) { int2data(to_i) }
+      lazy_attr(:data) { int2data(to_i) }
     end
 
     #
@@ -346,7 +346,7 @@ class IPAddress
     #     #=> "50.100.16.172.in-addr.arpa"
     #
     def reverse
-      lazy(:reverse) { "#{ary2addr(octets.reverse)}.in-addr.arpa" }
+      lazy_attr(:reverse) { "#{ary2addr(octets.reverse)}.in-addr.arpa" }
     end
 
     alias_method :arpa, :reverse
@@ -362,7 +362,7 @@ class IPAddress
     #     #=> true
     #
     def private?
-      lazy(:private_p) { self.class.private_nets.any? { |i| i.include?(self) } }
+      lazy_attr(:private_p) { self.class.private_nets.any? { |i| i.include?(self) } }
     end
 
     #
@@ -378,7 +378,7 @@ class IPAddress
     #     #=> true
     #
     def a?
-      lazy(:a_p) { CLASSFUL[8] === bits }
+      lazy_attr(:a_p) { CLASSFUL[8] === bits }
     end
 
     #
@@ -394,7 +394,7 @@ class IPAddress
     #     #=> true
     #
     def b?
-      lazy(:b_p) { CLASSFUL[16] === bits }
+      lazy_attr(:b_p) { CLASSFUL[16] === bits }
     end
 
     #
@@ -410,7 +410,7 @@ class IPAddress
     #     #=> true
     #
     def c?
-      lazy(:c_p) { CLASSFUL[24] === bits }
+      lazy_attr(:c_p) { CLASSFUL[24] === bits }
     end
 
     #
@@ -425,7 +425,7 @@ class IPAddress
     #     #=> "ac10:0a01"
     #
     def to_ipv6
-      lazy(:to_ipv6) { '%.4x:%.4x' % int2data(to_i).unpack('n2') }
+      lazy_attr(:to_ipv6) { '%.4x:%.4x' % int2data(to_i).unpack('n2') }
     end
 
   end

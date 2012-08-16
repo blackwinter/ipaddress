@@ -13,7 +13,7 @@
 #++
 
 require 'ipaddress/conversions'
-require 'ipaddress/lazy'
+require 'nuggets/util/lazy_attr'
 
 class IPAddress
 
@@ -23,7 +23,7 @@ class IPAddress
   include Conversions
   extend  Conversions
 
-  include Lazy
+  include Util::LazyAttr
 
   VERSION = '0.8.0'
   NAME    = 'IPAddress'
@@ -309,7 +309,7 @@ class IPAddress
   #     #=> "0010000000000001000011011011100000 [...] "
   #
   def bits
-    lazy(:bits) { data2bits(data) }
+    lazy_attr(:bits) { data2bits(data) }
   end
 
   #
@@ -336,7 +336,7 @@ class IPAddress
   #     #=> true
   #
   def network?
-    lazy(:network_p) { i = prefix.to_i; to_i | i == i }
+    lazy_attr(:network_p) { i = prefix.to_i; to_i | i == i }
   end
 
   #
@@ -354,7 +354,7 @@ class IPAddress
   #     #=> "2001:db8::/32"
   #
   def network
-    lazy(:network, false) { network? ? self : at(0) }
+    lazy_attr(:network, false) { network? ? self : at(0) }
   end
 
   #
@@ -371,7 +371,7 @@ class IPAddress
   #     #=> 42540766411282592856903984951653826560
   #
   def network_i
-    lazy(:network_i) { to_i & prefix.to_i }
+    lazy_attr(:network_i) { to_i & prefix.to_i }
   end
 
   #
@@ -383,7 +383,7 @@ class IPAddress
   #     #=> "172.16.10.255"
   #
   def broadcast
-    lazy(:broadcast, false) { at(-1) }
+    lazy_attr(:broadcast, false) { at(-1) }
   end
 
   #
@@ -404,7 +404,7 @@ class IPAddress
   # a helper to other functions.
   #
   def broadcast_i
-    lazy(:broadcast_i) { network_i + size - 1 }
+    lazy_attr(:broadcast_i) { network_i + size - 1 }
   end
 
   #
@@ -423,7 +423,7 @@ class IPAddress
   #     #=> 18446744073709551616
   #
   def size
-    lazy(:size) { 2 ** prefix.host_prefix }
+    lazy_attr(:size) { 2 ** prefix.host_prefix }
   end
 
   #
@@ -686,15 +686,15 @@ class IPAddress
   alias_method :+, :summarize
 
   def range
-    lazy(:range) { network_i..broadcast_i }
+    lazy_attr(:range) { network_i..broadcast_i }
   end
 
   def range_i
-    lazy(:range_i) { range.to_a }
+    lazy_attr(:range_i) { range.to_a }
   end
 
   def boundaries
-    lazy(:boundaries) { [(r = range).first, r.last] }
+    lazy_attr(:boundaries) { [(r = range).first, r.last] }
   end
 
   def each_i(first = nil, last = nil)
@@ -797,7 +797,7 @@ class IPAddress
   #     #=> "192.168.100.1"
   #
   def first
-    lazy(:first, false) { at(1) }
+    lazy_attr(:first, false) { at(1) }
   end
 
   #
@@ -822,7 +822,7 @@ class IPAddress
   #     #=> "192.168.100.254"
   #
   def last
-    lazy(:last, false) { at(-2) }
+    lazy_attr(:last, false) { at(-2) }
   end
 
   #
@@ -840,7 +840,7 @@ class IPAddress
   #     #=>  "10.0.0.6"]
   #
   def hosts
-    lazy(:hosts) { hosts = []; each_host { |i| hosts << i }; hosts }
+    lazy_attr(:hosts) { hosts = []; each_host { |i| hosts << i }; hosts }
   end
 
   def mapped
@@ -900,7 +900,7 @@ class IPAddress
   end
 
   def hash
-    lazy(:hash) { [to_i, prefix.hash].hash }
+    lazy_attr(:hash) { [to_i, prefix.hash].hash }
   end
 
   alias_method :eql?, :==

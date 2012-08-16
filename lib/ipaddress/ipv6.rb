@@ -214,7 +214,7 @@ class IPAddress
     #     #=> "2001:0db8:0000:0000:0008:0800:200c:417a"
     #
     def address
-      lazy(:address) { IN6FORMAT % groups }
+      lazy_attr(:address) { IN6FORMAT % groups }
     end
 
     #
@@ -226,7 +226,7 @@ class IPAddress
     #     #=> "2001:db8::8:800:200c:417a"
     #
     def compressed
-      lazy(:compressed) {
+      lazy_attr(:compressed) {
         r1, r2, q = /\b0(?::0)+\b/, /:{3,}/, '::'
 
         a, b = [s = groups.map { |i| i.to_s(16) }.join(':'), s.reverse].map! { |t|
@@ -246,7 +246,7 @@ class IPAddress
     #     #=> 64
     #
     def prefix
-      lazy(:prefix, false) { Prefix.new(@netmask) }
+      lazy_attr(:prefix, false) { Prefix.new(@netmask) }
     end
 
     #
@@ -259,7 +259,7 @@ class IPAddress
     #     #=> [8193, 3512, 0, 0, 8, 2048, 8204, 16762]
     #
     def groups
-      lazy(:groups) { self.class.groups(@ip) }
+      lazy_attr(:groups) { self.class.groups(@ip) }
     end
 
     #
@@ -274,7 +274,7 @@ class IPAddress
     # Not to be confused with the similar IPv6#to_hex method.
     #
     def hexs
-      lazy(:hexs) { address.split(':') }
+      lazy_attr(:hexs) { address.split(':') }
     end
 
     #
@@ -287,7 +287,7 @@ class IPAddress
     #     #=> "20010db80000000000080800200c417a"
     #
     def to_hex
-      lazy(:to_hex) { hexs.join('') }
+      lazy_attr(:to_hex) { hexs.join('') }
     end
 
     #
@@ -326,7 +326,7 @@ class IPAddress
     #     #=> 42540766411282592856906245548098208122
     #
     def to_i
-      lazy(:int) { to_hex.hex }
+      lazy_attr(:int) { to_hex.hex }
     end
 
     alias_method :u128, :to_i
@@ -351,7 +351,7 @@ class IPAddress
     #   a.puts binary_data
     #
     def data
-      lazy(:data) { groups.pack('n8') }
+      lazy_attr(:data) { groups.pack('n8') }
     end
 
     #
@@ -388,7 +388,7 @@ class IPAddress
     #     #=> "f.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.0.0.5.0.5.0.e.f.f.3.ip6.arpa"
     #
     def reverse
-      lazy(:reverse) { "#{to_hex.gsub(/(?=.)/, '.').reverse}ip6.arpa" }
+      lazy_attr(:reverse) { "#{to_hex.gsub(/(?=.)/, '.').reverse}ip6.arpa" }
     end
 
     alias_method :arpa, :reverse
@@ -402,7 +402,7 @@ class IPAddress
     #     #=> "2001-0db8-0000-0000-0008-0800-200c-417a.ipv6-literal.net"
     #
     def literal
-      lazy(:literal) { "#{address.tr(':', '-')}.ipv6-literal.net" }
+      lazy_attr(:literal) { "#{address.tr(':', '-')}.ipv6-literal.net" }
     end
 
     #
@@ -411,7 +411,7 @@ class IPAddress
     # See IPAddress::IPv6::Unspecified for more information
     #
     def unspecified?
-      lazy(:unspecified_p) { prefix.max? && compressed == '::' }
+      lazy_attr(:unspecified_p) { prefix.max? && compressed == '::' }
     end
 
     #
@@ -420,7 +420,7 @@ class IPAddress
     # See IPAddress::IPv6::Loopback for more information
     #
     def loopback?
-      lazy(:loopback_p) { prefix.max? && compressed == '::1' }
+      lazy_attr(:loopback_p) { prefix.max? && compressed == '::1' }
     end
 
     #
@@ -429,7 +429,7 @@ class IPAddress
     # See IPAddress::IPv6::Mapped for more information
     #
     def mapped?
-      lazy(:mapped_p) { to_i >> 32 == 0xffff }
+      lazy_attr(:mapped_p) { to_i >> 32 == 0xffff }
     end
 
     #

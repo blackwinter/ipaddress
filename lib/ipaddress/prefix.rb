@@ -25,7 +25,7 @@ class IPAddress
     include Conversions
     extend  Conversions
 
-    include Lazy
+    include Util::LazyAttr
 
     #
     # Creates a new prefix object for 32 bits IPv4 addresses /
@@ -74,7 +74,7 @@ class IPAddress
     #         "0000000000000000000000000000000000000000000000000000000000000000"
     #
     def bits
-      lazy(:bits) { '1' * prefix << '0' * host_prefix }
+      lazy_attr(:bits) { '1' * prefix << '0' * host_prefix }
     end
 
     #
@@ -92,7 +92,7 @@ class IPAddress
     #     #=> 340282366920938463444927863358058659840
     #
     def to_i
-      lazy(:int) { bits.to_i(2) }
+      lazy_attr(:int) { bits.to_i(2) }
     end
 
     #
@@ -140,23 +140,23 @@ class IPAddress
     #     #=> 32
     #
     def host_prefix
-      lazy(:host_prefix) { max - prefix }
+      lazy_attr(:host_prefix) { max - prefix }
     end
 
     def max
-      lazy(:max) { self.class::MAX }
+      lazy_attr(:max) { self.class::MAX }
     end
 
     def max?
-      lazy(:max_p) { prefix == max }
+      lazy_attr(:max_p) { prefix == max }
     end
 
     def prev
-      lazy(:prev) { prefix - 1 }
+      lazy_attr(:prev) { prefix - 1 }
     end
 
     def next
-      lazy(:next) { prefix + 1 unless max? }
+      lazy_attr(:next) { prefix + 1 unless max? }
     end
 
     def superprefix(num)
@@ -209,7 +209,7 @@ class IPAddress
     #     #=> "255.255.255.0"
     #
     def to_ip
-      lazy(:ip) { bits2addr(bits) }
+      lazy_attr(:ip) { bits2addr(bits) }
     end
 
     #
@@ -222,7 +222,7 @@ class IPAddress
     #     #=> [255, 255, 255, 0]
     #
     def octets
-      lazy(:octets) { addr2ary(to_ip) }
+      lazy_attr(:octets) { addr2ary(to_ip) }
     end
 
     #
@@ -251,7 +251,7 @@ class IPAddress
     #     #=> "0.0.0.255"
     #
     def hostmask
-      lazy(:hostmask) { int2addr(~to_i) }
+      lazy_attr(:hostmask) { int2addr(~to_i) }
     end
 
   end
