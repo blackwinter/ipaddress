@@ -825,6 +825,10 @@ class IPAddress
     lazy_attr(:last, false) { at(-2) }
   end
 
+  def succ
+    lazy_attr(:succ, false) { self.class.parse_i(to_i + 1, prefix) }
+  end
+
   #
   # Returns an array with the IP addresses of
   # all the hosts in the network.

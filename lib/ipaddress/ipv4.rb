@@ -27,7 +27,7 @@ class IPAddress
       24 => /\A110/   # Class C, D and E, from 192.0.0.0 to 255.255.255.254
     }
 
-    part = %r{(?: 25[0-5] | 2[0-4]\d | 1\d\d | [1-9]\d | \d )}x
+    part = %r{ (?: 25[0-5] | 2[0-4]\d | 1\d\d | [1-9]\d | \d ) }x
 
     INTERNAL_RE = %r{ (?: #{part} \. ){3} #{part} }xo
 
@@ -40,7 +40,7 @@ class IPAddress
 
     MAX_PREFIX = Prefix::MAX
 
-    PREFIX_RE = %r{\A(?:[12]?\d|3[0-2])\z}
+    PREFIX_RE = %r{ \A (?: [12]?\d | 3[0-2] ) \z }x
 
     class << self
 

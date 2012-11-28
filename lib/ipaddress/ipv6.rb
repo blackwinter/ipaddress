@@ -75,7 +75,7 @@ class IPAddress
     #
     # Format string to pretty print IPv6 addresses
     #
-    IN6FORMAT = ('%.4x:' * 8).chop
+    IN6FORMAT = Array.new(8, '%.4x').join(':')
 
     Prefix = Prefix128
 
