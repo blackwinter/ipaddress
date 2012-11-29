@@ -205,6 +205,10 @@ class IPAddress
       end
     end
 
+    def version
+      6
+    end
+
     #
     # Returns the IPv6 address in uncompressed form:
     #

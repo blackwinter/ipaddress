@@ -181,6 +181,10 @@ class IPAddress
       @address, @octets = ip, addr2ary(ip)
     end
 
+    def version
+      4
+    end
+
     #
     # Returns the address portion of the IPv4 object
     # as a string.

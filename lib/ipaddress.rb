@@ -595,8 +595,9 @@ class IPAddress
   #
   # If +new_prefix+ is less than 1, returns 0.0.0.0/0
   #
-  def supernet(num)
-    new_prefix(prefix.superprefix(num)).network
+  def supernet(num, relax = false)
+    superprefix = prefix.superprefix(num, relax)
+    new_prefix(superprefix).network if superprefix
   end
 
   def exact_supernet(*other)
@@ -685,16 +686,41 @@ class IPAddress
 
   alias_method :+, :summarize
 
-  def range
-    lazy_attr(:range) { network_i..broadcast_i }
+  def range(other)
+    raise TypeError, 'must be same version' if other.version != version
+
+    return [self] unless other > self
+
+    nets, n, l, m = [], to_i, other.to_i, self.class::MAX_PREFIX
+
+    until n > l
+      i = self.class.parse_i(n, m)
+      f = i.bits.rindex('1') || -1
+
+      while s = i.supernet(f += 1, true)
+        unless s.broadcast_i > l
+          i = s
+          break
+        end
+      end
+
+      nets << i
+      n = i.broadcast_i + 1
+    end
+
+    nets
   end
 
-  def range_i
-    lazy_attr(:range_i) { range.to_a }
+  def span
+    lazy_attr(:span) { network_i..broadcast_i }
+  end
+
+  def span_i
+    lazy_attr(:span_i) { span.to_a }
   end
 
   def boundaries
-    lazy_attr(:boundaries) { [(r = range).first, r.last] }
+    lazy_attr(:boundaries) { [(s = span).first, s.last] }
   end
 
   def each_i(first = nil, last = nil)
@@ -768,10 +794,10 @@ class IPAddress
   end
 
   def at(index)
-    r = range
+    s = span
 
-    index += index < 0 ? r.last + 1 : r.first
-    each(index) { |i| return i } if r.include?(index)
+    index += index < 0 ? s.last + 1 : s.first
+    each(index) { |i| return i } if s.include?(index)
 
     nil
   end

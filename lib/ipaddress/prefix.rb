@@ -159,20 +159,18 @@ class IPAddress
       lazy_attr(:next) { prefix + 1 unless max? }
     end
 
-    def superprefix(num)
-      validate_prefix(num = [0, num].max, nil, prev)
-      num
+    def superprefix(num, relax = false)
+      validate_prefix([0, num].max, nil, prev, relax) or return
     end
 
-    def subprefix(num)
-      validate_prefix(num, prefix)
+    def subprefix(num, relax = false)
+      validate_prefix(num, prefix, relax) or return
       [2 ** (max - num), 2 ** (num - prefix)]
     end
 
-    def validate_prefix(num, first = nil, last = nil)
-      unless (range = (first || 0)..(last || max)).include?(num)
-        raise ArgumentError, "Prefix must be in range #{range}, got: #{num}"
-      end
+    def validate_prefix(num, first = nil, last = nil, relax = false)
+      return num if (range = (first || 0)..(last || max)).include?(num)
+      raise ArgumentError, "Prefix must be in range #{range}, got: #{num}" unless relax
     end
 
   end
