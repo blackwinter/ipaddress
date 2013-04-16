@@ -13,7 +13,7 @@
 #++
 
 require 'ipaddress/conversions'
-require 'nuggets/util/lazy_attr'
+require 'nuggets/lazy_attr'
 
 class IPAddress
 
@@ -23,7 +23,7 @@ class IPAddress
   include Conversions
   extend  Conversions
 
-  include Util::LazyAttr
+  include Nuggets::LazyAttr
 
   VERSION = '0.8.0'
   NAME    = 'IPAddress'
