@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{blackwinter-ipaddress}
-  s.version = "0.8.0"
+  s.version = "0.8.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ['Marco Ceresa', 'Jens Wille']
@@ -33,7 +33,6 @@ Gem::Specification.new do |s|
     "lib/ipaddress/ipv6.rb",
     "lib/ipaddress/prefix.rb",
     "lib/ipaddress/conversions.rb",
-    "lib/ipaddress/lazy.rb",
     "test/ipaddress/ipv4_test.rb",
     "test/ipaddress/ipv6_test.rb",
     "test/ipaddress/prefix_test.rb",

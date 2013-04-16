@@ -25,7 +25,7 @@ class IPAddress
 
   include Nuggets::LazyAttr
 
-  VERSION = '0.8.0'
+  VERSION = '0.8.0.2'
   NAME    = 'IPAddress'
   GEM     = 'ipaddress'
   AUTHORS = ['Marco Ceresa <ceresa@ieee.org>']
