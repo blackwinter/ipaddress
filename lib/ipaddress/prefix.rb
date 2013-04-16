@@ -25,7 +25,7 @@ class IPAddress
     include Conversions
     extend  Conversions
 
-    include Util::LazyAttr
+    include Nuggets::LazyAttr
 
     #
     # Creates a new prefix object for 32 bits IPv4 addresses /

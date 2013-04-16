@@ -22,7 +22,7 @@ begin
       a layer of compatibility with Ruby's own IPAddr, while
       addressing many of its issues.
     EOD
-    gem.add_dependency 'ruby-nuggets', '>= 0.8.9'
+    gem.add_dependency 'ruby-nuggets', '>= 0.9.3'
   end
 rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
