@@ -102,8 +102,8 @@ class IPAddress
       #     #=> "2001:db8::8:800:200c:417a/64"
       #
       def parse_i(i, prefix = MAX_PREFIX)
-        groups = Array.new(8) { |j| i >> (112 - 16 * j) & 0xffff }
-        instantiate { @groups, @netmask = groups, prefix }
+        instantiate(:netmask => prefix, :groups =>
+          Array.new(8) { |j| i >> (112 - 16 * j) & 0xffff })
       end
 
       alias_method :parse_u128, :parse_i
@@ -128,7 +128,7 @@ class IPAddress
       #     #=> "2001:db8::8:800:200c:417a/64"
       #
       def parse_data(str, prefix = MAX_PREFIX)
-        instantiate { @groups, @netmask = str.unpack('n8'), prefix }
+        instantiate(:netmask => prefix, :groups => str.unpack('n8'))
       end
 
       #

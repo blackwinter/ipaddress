@@ -63,7 +63,7 @@ class IPAddress
       #     #=> "10.0.0.0/8"
       #
       def parse_i(i, prefix = MAX_PREFIX)
-        instantiate { @int, @_prefix = i, prefix }
+        instantiate(:int => i, :_prefix = prefix)
       end
 
       alias_method :parse_u32, :parse_i

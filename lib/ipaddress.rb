@@ -233,9 +233,9 @@ class IPAddress
 
     private
 
-    def instantiate(&block)
+    def instantiate(ivars = {})
       instance = allocate
-      instance.instance_eval(&block)
+      ivars.each { |key, value| instance.instance_variable_set(key, value) }
       instance
     end
 
