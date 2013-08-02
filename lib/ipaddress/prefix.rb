@@ -160,12 +160,11 @@ class IPAddress
     end
 
     def superprefix(num, relax = false)
-      validate_prefix([0, num].max, nil, prev, relax) or return
+      validate_prefix([0, num].max, nil, prev, relax)
     end
 
     def subprefix(num, relax = false)
-      validate_prefix(num, prefix, relax) or return
-      [2 ** (max - num), 2 ** (num - prefix)]
+      [2 ** (max - num), 2 ** (num - prefix)] if validate_prefix(num, prefix, relax)
     end
 
     def validate_prefix(num, first = nil, last = nil, relax = false)
