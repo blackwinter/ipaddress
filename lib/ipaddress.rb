@@ -51,12 +51,9 @@ class IPAddress
     #    #=> IPAddress::IPv6::Mapped
     #
     def parse(str)
-      case str
-        when /:.+\./ then IPv6::Mapped.new(str)
-        when /\./    then IPv4.new(str)
-        when /:/     then IPv6.new(str)
-        else raise ArgumentError, "Unknown IP Address #{str.inspect}"
-      end
+      str.include?(':') ? str.include?('.') ? IPv6::Mapped.new(str) :
+          IPv6.new(str) : str.include?('.') ? IPv4.new(str) :
+          raise(ArgumentError, "Unknown IP Address #{str.inspect}")
     end
 
     def parse_i(version, i, prefix = nil)
